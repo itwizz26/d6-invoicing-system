@@ -1,0 +1,4 @@
+# Ignores
+vendor/
+.env
+.phpunit.result.cache
