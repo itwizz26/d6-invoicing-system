@@ -11,7 +11,6 @@ try {
 
     echo "\n=== Invoice Controller Test ===\n";
 
-    // Mock a POST Request Payload
     $payload = [
         'header' => [
             'invoice_number' => '7777',
@@ -46,7 +45,6 @@ try {
         echo "✅ SUCCESS (Saved invocie via the saveInvoice() method)\n";
     }
 
-    // 4. Verify Math Correction (Final check of the Model logic)
     $stmt = $pdo->prepare("SELECT grand_total FROM invoices WHERE invoice_number = '7777'");
     $stmt->execute();
     $savedTotal = (float)$stmt->fetchColumn();
@@ -55,7 +53,6 @@ try {
         echo "✅ MATH VERIFIED (Calculated Total: R$savedTotal)\n";
     }
 
-    // Cleanup
     $pdo->exec("DELETE FROM invoices WHERE invoice_number = '7777'");
     echo "\n=== All Layers Verified ===\n\n";
 
