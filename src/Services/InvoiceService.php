@@ -3,25 +3,24 @@
 namespace App\Services;
 
 use App\Repositories\InvoiceRepository;
-use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\Invoice;
 use Exception;
 use DateTime;
 
 class InvoiceService {
-    private $repo;
-
-    public function __construct(InvoiceRepository $repo) {
-        $this->repo = $repo;
-    }
+    
+    public function __construct(
+        protected InvoiceRepository $repo = new InvoiceRepository()
+    ) {}
 
     public function saveInvoice(array $data): bool {
         $settings = $this->repo->getSystemSettings();
         $invoice = new Invoice();
         $invoice->invoice_number = $data['header']['invoice_number'];
-        $invoice->invoice_date   = $data['header']['invoice_date'];
-        $invoice->due_date       = $data['header']['due_date'];
-        $invoice->customer_name  = $data['header']['customer_name'];
+        $invoice->invoice_date = $data['header']['invoice_date'];
+        $invoice->due_date = $data['header']['due_date'];
+        $invoice->customer_name = $data['header']['customer_name'];
         $invoice->customer_address = $data['header']['customer_address'];
 
         foreach ($data['items'] as $itemData) {

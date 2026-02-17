@@ -2,11 +2,15 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use App\Repositories\InvoiceRepository;
 use App\Controllers\InvoiceController;
+use App\Services\InvoiceService;
 use App\Database\Connection;
 
 try {
-    $controller = new InvoiceController();
+    $repository = new InvoiceRepository();
+    $service = new InvoiceService($repository);
+    $controller = new InvoiceController($repository, $service);
     $pdo = Connection::getInstance();
 
     echo "\n=== Invoice Controller Test ===\n";
@@ -38,14 +42,11 @@ try {
     
     echo "Testing the Controller via Service Layer Integration...\n\n";
     
-    $repo = new \App\Repositories\InvoiceRepository();
-    $service = new \App\Services\InvoiceService($repo);
-    
     if ($service->saveInvoice($payload)) {
         echo "✅ SUCCESS (Saved invocie via the saveInvoice() method)\n";
     }
 
-    $stmt = $pdo->prepare("SELECT grand_total FROM invoices WHERE invoice_number = '7777'");
+    $stmt = $pdo->prepare("SELECT grand_total FROM invoices WHERE invoice_number = '7777';");
     $stmt->execute();
     $savedTotal = (float)$stmt->fetchColumn();
 

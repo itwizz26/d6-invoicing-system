@@ -7,12 +7,13 @@ use App\Services\InvoiceService;
 use Exception;
 
 class InvoiceController {
-    private $service;
-    private $repository;
-
-    public function __construct() {
-        $this->repository = new InvoiceRepository();
-        $this->service = new InvoiceService($this->repository);
+    
+    public function __construct(
+        protected ?InvoiceRepository $repository = null,
+        protected ?InvoiceService $service = null 
+    ) {
+        $this->repository ??= new InvoiceRepository();
+        $this->service ??= $service ?? new InvoiceService($this->repository);
     }
 
     public function handleRequest() {
